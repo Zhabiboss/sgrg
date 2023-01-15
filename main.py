@@ -20,6 +20,8 @@ splashes = []
 with open("Resources/splashes.txt", "r") as s:
     splashes = s.readlines()
 pygame.display.set_caption(f"Super Great Rythm Game ({random.choice(splashes)})")
+icon = pygame.image.load("Resources/icon.png")
+pygame.display.set_icon(icon)
 pygame.mouse.set_visible(False)
 cursor = pygame.image.load("Resources/cursor.png")
 
