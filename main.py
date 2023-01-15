@@ -20,6 +20,8 @@ splashes = []
 with open("Resources/splashes.txt", "r") as s:
     splashes = s.readlines()
 pygame.display.set_caption(f"Super Great Rythm Game ({random.choice(splashes)})")
+pygame.mouse.set_visible(False)
+cursor = pygame.image.load("Resources/cursor.png")
 
 class Node:
     def __init__(self, x, y, duration):
@@ -100,9 +102,10 @@ class Level:
             if node.lifespan <= node.duration and node.active == False:
                 self.score += 1
                 self.nodes.remove(node)
-                scores["level1"] = self.score
-                with open("UserData/scores.json", "w") as score:
-                    json.dump(scores, score)
+                if scores["level1"] < self.score:
+                    scores["level1"] = self.score
+                    with open("UserData/scores.json", "w") as score:
+                        json.dump(scores, score)
 
     def draw(self):
         text = scorefont.render(f"Score: {self.score}", True, "blue")
@@ -136,9 +139,10 @@ class Level2:
             if node.lifespan <= node.duration and node.active == False and pygame.Rect(node.x - tile // 2, node.y - tile // 2, tile, tile).collidepoint(*pygame.mouse.get_pos()):
                 self.score += 1
                 self.nodes.remove(node)
-                scores["level2"] = self.score
-                with open("UserData/scores.json", "w") as score:
-                    json.dump(scores, score)
+                if scores["level2"] < self.score:
+                    scores["level2"] = self.score
+                    with open("UserData/scores.json", "w") as score:
+                        json.dump(scores, score)
 
     def draw(self):
         text = scorefont.render(f"Score: {self.score}", True, "blue")
@@ -167,6 +171,8 @@ class Game:
 
             self.level.update()
             self.level.draw()
+
+            screen.blit(cursor, pygame.mouse.get_pos())
 
             for ev in pygame.event.get():
                 if ev.type == pygame.QUIT:
@@ -227,6 +233,8 @@ class CreditsMenu:
             screen.blit(self.bg, (0, 0))
             self.draw()
 
+            screen.blit(cursor, pygame.mouse.get_pos())
+
             for ev in pygame.event.get():
                 if ev.type == pygame.QUIT:
                     pygame.quit()
@@ -260,6 +268,8 @@ class AboutMenu:
 
             screen.blit(self.bg, (0, 0))
             self.draw()
+
+            screen.blit(cursor, pygame.mouse.get_pos())
 
             for ev in pygame.event.get():
                 if ev.type == pygame.QUIT:
@@ -306,6 +316,8 @@ class MainMenu:
 
             self.draw()
             screen.blit(self.logo, (0, 0))
+
+            screen.blit(cursor, pygame.mouse.get_pos())
 
             for ev in pygame.event.get():
                 if ev.type == pygame.QUIT:
@@ -358,6 +370,8 @@ class LevelMenu:
 
             screen.blit(self.bg, (0, 0))
             self.draw()
+
+            screen.blit(cursor, pygame.mouse.get_pos())
 
             text = scorefont.render(f"Level 1: {scores['level1']}", True, "green")
             screen.blit(text, (width - text.get_rect().width, 0))
